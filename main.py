@@ -157,14 +157,13 @@ class Form(QMainWindow):
             text = text.split(' ') if i in [3, 4] else text
             print(text)
 
-        if type(text) == list:
-            for item in text:
-                print(item)
-                list_data.append(item)
-        else:
-            list_data.append(text)
+            if type(text) == list:
+                for item in text:
+                    print(item)
+                    list_data.append(item)
+            else:
+                list_data.append(text)
 
-        print(list_data)
         return list_data
     
     def create_query_add(self):
