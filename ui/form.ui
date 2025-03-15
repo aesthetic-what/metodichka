@@ -38,7 +38,7 @@
           <string notr="true">background-color: rgb(255, 184, 151);</string>
          </property>
          <property name="text">
-          <string>TextLabel</string>
+          <string>Наименование</string>
          </property>
         </widget>
        </item>
@@ -70,7 +70,7 @@
           <string notr="true">background-color: rgb(255, 184, 151);</string>
          </property>
          <property name="text">
-          <string>TextLabel</string>
+          <string>Тип партнера</string>
          </property>
         </widget>
        </item>
@@ -102,7 +102,7 @@
           <string notr="true">background-color: rgb(255, 184, 151);</string>
          </property>
          <property name="text">
-          <string>TextLabel</string>
+          <string>Рейтинг</string>
          </property>
         </widget>
        </item>
@@ -134,7 +134,7 @@
           <string notr="true">background-color: rgb(255, 184, 151);</string>
          </property>
          <property name="text">
-          <string>TextLabel</string>
+          <string>Адрес</string>
          </property>
         </widget>
        </item>
@@ -166,7 +166,7 @@
           <string notr="true">background-color: rgb(255, 184, 151);</string>
          </property>
          <property name="text">
-          <string>TextLabel</string>
+          <string>ФИО директора</string>
          </property>
         </widget>
        </item>
@@ -198,7 +198,7 @@
           <string notr="true">background-color: rgb(255, 184, 151);</string>
          </property>
          <property name="text">
-          <string>TextLabel</string>
+          <string>Телефон</string>
          </property>
         </widget>
        </item>
@@ -230,7 +230,7 @@
           <string notr="true">background-color: rgb(255, 184, 151);</string>
          </property>
          <property name="text">
-          <string>TextLabel</string>
+          <string>email</string>
          </property>
         </widget>
        </item>
@@ -262,14 +262,14 @@
           <string notr="true">background-color: rgb(255, 184, 151);</string>
          </property>
          <property name="text">
-          <string>TextLabel</string>
+          <string>ИНН</string>
          </property>
         </widget>
        </item>
       </layout>
      </item>
      <item>
-      <layout class="QVBoxLayout" name="verticalLayout_2">
+      <layout class="QVBoxLayout" name="text_layout">
        <item>
         <widget class="QLineEdit" name="lineEdit">
          <property name="sizePolicy">
@@ -279,22 +279,6 @@
           </sizepolicy>
          </property>
         </widget>
-       </item>
-       <item>
-        <spacer name="verticalSpacer_8">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Fixed</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>10</height>
-          </size>
-         </property>
-        </spacer>
        </item>
        <item>
         <widget class="QComboBox" name="comboBox">
@@ -330,22 +314,6 @@
         </widget>
        </item>
        <item>
-        <spacer name="verticalSpacer_9">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Fixed</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>10</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item>
         <widget class="QLineEdit" name="lineEdit_3">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
@@ -354,22 +322,6 @@
           </sizepolicy>
          </property>
         </widget>
-       </item>
-       <item>
-        <spacer name="verticalSpacer_10">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Fixed</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>10</height>
-          </size>
-         </property>
-        </spacer>
        </item>
        <item>
         <widget class="QLineEdit" name="lineEdit_4">
@@ -382,22 +334,6 @@
         </widget>
        </item>
        <item>
-        <spacer name="verticalSpacer_11">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Fixed</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>10</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item>
         <widget class="QLineEdit" name="lineEdit_5">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
@@ -406,22 +342,6 @@
           </sizepolicy>
          </property>
         </widget>
-       </item>
-       <item>
-        <spacer name="verticalSpacer_12">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Fixed</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>10</height>
-          </size>
-         </property>
-        </spacer>
        </item>
        <item>
         <widget class="QLineEdit" name="lineEdit_6">
@@ -434,22 +354,6 @@
         </widget>
        </item>
        <item>
-        <spacer name="verticalSpacer_13">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Fixed</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>10</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item>
         <widget class="QLineEdit" name="lineEdit_7">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
@@ -458,22 +362,6 @@
           </sizepolicy>
          </property>
         </widget>
-       </item>
-       <item>
-        <spacer name="verticalSpacer_14">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Fixed</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>10</height>
-          </size>
-         </property>
-        </spacer>
        </item>
        <item>
         <widget class="QLineEdit" name="lineEdit_8">

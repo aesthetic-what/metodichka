@@ -88,8 +88,13 @@ class Ui_MainWindow(object):
         self.scrollAreaWidgetContents.setObjectName("scrollAreaWidgetContents")
         self.scrollAreaList = QtWidgets.QListWidget(self.scrollAreaWidgetContents)
         self.scrollAreaList.setGeometry(QtCore.QRect(0, 0, 561, 461))
+        self.scrollAreaList.setIconSize(QtCore.QSize(20, 20))
         self.scrollAreaList.setResizeMode(QtWidgets.QListView.Adjust)
         self.scrollAreaList.setObjectName("scrollAreaList")
+        item = QtWidgets.QListWidgetItem()
+        self.scrollAreaList.addItem(item)
+        item = QtWidgets.QListWidgetItem()
+        self.scrollAreaList.addItem(item)
         self.scrollArea.setWidget(self.scrollAreaWidgetContents)
         MainWindow.setCentralWidget(self.centralwidget)
 
@@ -105,4 +110,21 @@ class Ui_MainWindow(object):
         self.label.setText(_translate("MainWindow", "Страница 1"))
         self.button_back.setText(_translate("MainWindow", "Назад"))
         self.button_next.setText(_translate("MainWindow", "Вперед"))
+        __sortingEnabled = self.scrollAreaList.isSortingEnabled()
+        self.scrollAreaList.setSortingEnabled(False)
+        item = self.scrollAreaList.item(0)
+        item.setText(_translate("MainWindow", "sfdsf"))
+        item = self.scrollAreaList.item(1)
+        item.setText(_translate("MainWindow", "sdfsdf"))
+        self.scrollAreaList.setSortingEnabled(__sortingEnabled)
 import ui.res_rc
+
+
+# if __name__ == "__main__":
+#     import sys
+#     app = QtWidgets.QApplication(sys.argv)
+#     MainWindow = QtWidgets.QMainWindow()
+#     ui = Ui_MainWindow()
+#     ui.setupUi(MainWindow)
+#     MainWindow.show()
+#     sys.exit(app.exec_())

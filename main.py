@@ -1,24 +1,31 @@
 from PyQt5.QtWidgets import QApplication, QMainWindow
 from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import QSize
-from PyQt5 import uic
-from ui.main import Ui_MainWindow
 from ui.form import Ui_FormWindow
+from ui.main import Ui_MainWindow
+from PyQt5 import uic
 import pyodbc
 import sys
 
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
-        con_str = f"DRIVER={{ODBC Driver 17 for SQL Server}};SERVER=KLABSQLW19S1,49172;Trusted_Connection=yes;user=22200322; Database=db_metodichka;"
+        
+        con_str = f"DRIVER={{SQL Server}};SERVER=KLABSQLW19S1,49172;Trusted_Connection=yes;user=22200322; Database=db_metodichka;"
         connect = pyodbc.connect(con_str)
+        self.cursor = connect.cursor()
+        
         self.cur_page = 1
-        self.num_page_elem = 1
+        self.num_page_elem = 0
+        self.data_db = [[], []]
+        
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
+        
+        # uic.loadUi("ui/main.ui", self)
         self.setWindowTitle("Меню")
         self.setWindowIcon(QIcon("ui/resourses/Мастер пол.ico"))
-        self.cursor = connect.cursor()
+        
         self.get_data_from_table()
         self.connect_widgets()
         self.draw_frames()
@@ -35,8 +42,8 @@ class MainWindow(QMainWindow):
                 color: rgb(0,0,0);
             }
             """)
-        # for i in range(self.ui.scrollAreaList.count()):
-        #     item = self.ui.scrollAreaList.item(i)
+        # for i in range(self.scrollAreaList.count()):
+        #     item = self.scrollAreaList.item(i)
         #     item.setSizeHint(QSize(200, 50))  # Устанавливаем размер для каждого элемента
         
     def connect_widgets(self):
@@ -68,6 +75,18 @@ class MainWindow(QMainWindow):
             # Добавляем сформированную строку в scrollArealist
             self.ui.scrollAreaList.addItem(item_text)
             # print(item_list)
+    
+    def browsing(self, func):
+        if func == 'next' and self.num_page_elem + 1 < len(self.data_db):
+            self.cur_page += 1
+            self.num_page_elem += 4
+
+        elif func == 'back' and self.num_page_elem > 1:
+            self.cur_page -= 1
+            self.num_page_elem -= 4
+            
+        self.ui.label.setText(f'Страница {self.cur_page}')
+        self.draw_frames()
         
         
     def showData(self):
@@ -75,7 +94,7 @@ class MainWindow(QMainWindow):
         self.draw_frames()
         
     def call_form(self, func: str):
-        data_row = self.data_db[self.ui.scrollAreaList.currentIndex().row() + self.num_page_elem] if self.ui.scrollAreaList.currentIndex().row() != -1 else []\
+        data_row = self.data_db[self.ui.scrollAreaList.currentIndex().row() + self.num_page_elem] if self.ui.scrollAreaList.currentIndex().row() != -1 else []
             
         # print(data_row)
         
@@ -85,13 +104,15 @@ class MainWindow(QMainWindow):
 class Form(QMainWindow):
     def __init__(self, link_basewindow, func, data_row):
         super().__init__()
+        # uic.loadUi("ui/form.ui", self)
         self.ui = Ui_FormWindow()
         self.ui.setupUi(self)
         self.setWindowTitle("Форма")
         self.windowModality()
         self.setWindowIcon(QIcon("ui/resourses/Мастер пол.ico"))
+        self.data_db = [[], []]
         
-        conn_str = f"DRIVER={{ODBC Driver 17 for SQL Server}};SERVER=KLABSQLW19S1,49172;Trusted_Connection=yes;user=22200322; Database=db_metodichka;"
+        conn_str = f"DRIVER={{SQL Server}};SERVER=KLABSQLW19S1,49172;Trusted_Connection=yes;user=22200322; Database=db_metodichka;"
         connect = pyodbc.connect(conn_str)
         self.cursor = connect.cursor()
         
@@ -106,7 +127,7 @@ class Form(QMainWindow):
         button_text = {
             'add': lambda: self.ui.pushButton.setText('Добавить'),
             'edit': lambda: self.ui.pushButton.setText('Изменить'),
-            'delete': lambda: self.ui.pushButton.setText('Удалить')
+            'del': lambda: self.ui.pushButton.setText('Удалить')
         }
         button_text[self.func]()
         self.ui.pushButton.clicked.connect(self.execution_operation)
@@ -115,22 +136,55 @@ class Form(QMainWindow):
         operations = {
             'add': lambda: self.request(self.create_query_add()),
             'edit': lambda: self.request(self.create_query_edit()),
-            'delete': lambda: self.request(self.create_query_delete())
+            'del': lambda: self.request(self.create_query_delete())
         }
         operations[self.func]()
         self.close()
         
-    def request(self):
-        pass
+    def request(self, query):
+        try:
+            with self.cursor as conn:
+                conn.execute(query)
+                conn.commit()
+        except pyodbc.Error as ex:
+            print(ex.args[1])
+            
+    def get_input_data(self):
+        list_data = []
+        for i in range(8):
+            text = self.ui.text_layout.itemAt(i).widget().text() if i != 1 else\
+            self.ui.text_layout.itemAt(i).widget().currentText()
+            text = text.split(' ') if i in [3, 4] else text
+            print(text)
+
+            if type(text) == list:
+                for item in text:
+                    print(item)
+                    list_data.append(item)
+            else:
+                list_data.append(text)
+
+        return list_data
     
     def create_query_add(self):
-        pass
+        input_data = self.get_input_data()
+        return f"insert into Partners(type, name_partners, first_name_director, last_name_director, " + \
+                f"surname_director, email, number_phone, postal_code, region, city, street, " + \
+                f"number_home, tin, rating) values ('{input_data[1]}, '{input_data[0]}," + \
+                f"'{input_data[9]},','{input_data[8]},','{input_data[10]},','{input_data[12]},','{input_data[11]}," + \
+                f"'{input_data[3]},','{input_data[4]},','{input_data[5]},','{input_data[6]},','{input_data[7]}," + \
+                f"'{input_data[13]},','{input_data[2]},"
     
     def create_query_edit(self):
-        pass
+        input_data = self.get_input_data()
+        input_data = [item if item.isdigit() else f"'{item}'" for item in input_data]
+        return f'update Partners set type={input_data[1]}, name_partners={input_data[0]}, first_name_director={input_data[9]},' + \
+                f'last_name_director={input_data[8]}, surname_director={input_data[10]}, email={input_data[12]}, ' + \
+                f'number_phone={input_data[11]}, postal_code={input_data[3]}, region={input_data[4]}, city={input_data[5]}, ' + \
+                f'street={input_data[6]}, number_home={input_data[7]}, tin={input_data[13]}, rating={input_data[2]} where id = {self.data_row[0]}'
     
     def create_query_delete(self):
-        pass
+        return f"delete from Partners where id = {self.data_row[0]}"
     
     def changing_lines_edit(self):
         connect_widget_with_data_row = {
@@ -144,38 +198,13 @@ class Form(QMainWindow):
             7: f'{self.data_row[13]}',
         }
         
-        print(self.ui.verticalLayout_2.count())
+        # print(self.text_layout.count())
         
         
         for i in range(8):
-            # item = self.ui.verticalLayout_2.itemAt(i)
-            # if item is not None:
-            #     widget = item.widget()
-            #     if widget is not None:
-            #         widget.setText(connect_widget_with_data_row[i])
-            #     else:
-            #         print(f"На позиции {i} отсутствует виджет.")
-            # else:
-            #     print(f"В `verticalLayout_2` нет элемента на позиции {i}.")
-            self.ui.verticalLayout_2.itemAt(i).widget().setText(connect_widget_with_data_row[i])
-            if i == 1:
-                continue
-            else:
-                self.ui.verticalLayout_2.itemAt(i).widget().setCurrentText(connect_widget_with_data_row[i])
-            
-            self.ui.label.itemAt(i).widget().setEnabled(False) if self.func == 'delete' else None
-
-    def browsing(self, func):
-        if func == 'next' and self.number_page_elements < len(self.data_db):
-            self.current_number_page += 1
-            self.number_page_elements += 4
-
-        elif func == 'back' and self.number_page_elements > 1:
-            self.current_number_page -= 1
-            self.number_page_elements -= 4
-            
-        self.label_name_page.setText(f'Страница {self.current_number_page}')
-        self.draw_frames()
+            self.ui.text_layout.itemAt(i).widget().setText(connect_widget_with_data_row[i]) if i != 1 else \
+                self.ui.text_layout.itemAt(i).widget().setCurrentText(connect_widget_with_data_row[i])
+            self.ui.text_layout.itemAt(i).widget().setEnabled(False) if self.func == 'del' else None
         
     def closeEvent(self, event) -> None:
         self.link_basewindow.showData()
